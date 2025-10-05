@@ -1,0 +1,12 @@
+# Ignore virtual environment
+myenv/
+
+# Ignore compiled and cache files
+__pycache__/
+*.pyc
+
+# Ignore uploaded videos
+static/uploads/
+
+# Ignore database if needed
+*.db
