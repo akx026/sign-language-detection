@@ -1,0 +1,81 @@
+<!-- watch.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ video.title }}</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .video-container {
+            flex: 2;
+            padding: 20px;
+        }
+
+        .video-container video {
+            width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+        }
+
+        .suggestions {
+            flex: 1;
+            padding: 20px;
+            border-left: 1px solid #333;
+        }
+
+        .suggestions h3 {
+            margin-bottom: 10px;
+            color: #FF847C;
+        }
+
+        .suggested-item {
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .suggested-item video {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .suggested-item h4 {
+            margin: 5px 0;
+        }
+
+        .suggested-item:hover h4 {
+            color: #FECEAB;
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container">
+    <h1>{{ video.title }}</h1>
+    <video controls autoplay>
+        <source src="{{ url_for('static', filename=video.filename) }}" type="video/mp4">
+    </video>
+    <p>{{ video.description }}</p>
+</div>
+
+<div class="suggestions">
+    <h3>Suggested Videos</h3>
+    {% for v in other_videos %}
+    <div class="suggested-item" onclick="window.location.href='/watch/{{ v.id }}'">
+        <video muted>
+            <source src="{{ url_for('static', filename=v.filename) }}" type="video/mp4">
+        </video>
+        <h4>{{ v.title }}</h4>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

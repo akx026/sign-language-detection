@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: black;
+            color: white;
+            margin: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: black;
+            border-bottom: 2px solid #E84A5F;
+        }
+
+        .navbar-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #333;
+            min-width: 160px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+            text-align: center;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Centered Content */
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .video-box {
+            width: 640px;
+            height: 480px;
+            margin: 20px auto;
+            border: 2px solid #E84A5F;
+            background-color: black;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background-color: #E84A5F;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #FF847C;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <!-- Left Side -->
+        <div class="navbar-left">
+            <a href="/">Sign Detection</a>
+        </div>
+
+        <!-- Right Side -->
+        <div class="navbar-right">
+            <a href="/learning">Learning Mode</a>
+            <a href="/about">About</a>
+
+            <!-- Dropdown for logged-in user -->
+            <div class="dropdown">
+                <span class="dropdown-btn">Welcome, {{ username }} ▼</span>
+                <div class="dropdown-content">
+                    <a href="/user_dashboard">User Dashboard</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="container">
+        <h1>Real-Time Sign Language Detection</h1>
+        <p>Click below to start detecting sign language gestures.</p>
+
+        <!-- Live Camera Feed -->
+        <img src="{{ url_for('video_feed') }}" width="640" height="480" style="border: 3px solid #E84A5F; margin-top: 20px;">
+        <div class="buttons">
+            <button class="btn" onclick="startCamera()">Start Camera</button>
+            <button class="btn" onclick="stopCamera()">Stop Camera</button>
+        </div>
+    </div>
+
+    <script>
+        function startCamera() {
+            document.getElementById("videoFeed").src = "{{ url_for('video_feed') }}";
+        }
+
+        function stopCamera() {
+            document.getElementById("videoFeed").src = "";
+        }
+    </script>
+
+</body>
+</html>

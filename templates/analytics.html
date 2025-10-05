@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Analytics</title>
+    
+    <style>
+        body {
+            background: #000;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #E84A5F;
+        }
+
+        .info {
+            margin: 20px 0;
+            font-size: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #E84A5F;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .btn:hover {
+            background: #FF847C;
+        }
+
+        table {
+            width: 50%;
+            margin: auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #E84A5F;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>User Analytics</h1>
+        <p class="info">Total Users: {{ total_users }}</p>
+
+        <h2>Recent Signups</h2>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+            {% for user in recent_signups %}
+            <tr>
+                <td>{{ user["username"] }}</td>
+                <td>{{ user["email"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <br>
+        <a href="/admin" class="btn">Back to Admin</a>
+    </div>
+
+</body>
+</html>

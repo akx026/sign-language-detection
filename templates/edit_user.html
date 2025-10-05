@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label, input {
+            display: block;
+            margin: 10px auto;
+        }
+        button {
+            background: #E84A5F;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Edit User</h1>
+        <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" value="{{ user.username }}" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" value="{{ user.email }}" required>
+
+            <label>Password (Leave empty to keep current):</label>
+            <input type="password" name="password">
+
+            <label>Role:</label>
+            <select name="role">
+                <option value="user" {% if user.role == "user" %}selected{% endif %}>User</option>
+                <option value="admin" {% if user.role == "admin" %}selected{% endif %}>Admin</option>
+            </select>
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+</body>
+</html>

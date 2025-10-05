@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Mode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #111;
+        }
+
+        .navbar .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #FF847C;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            display: flex;
+            align-items: center;
+            background-color: #2A363B;
+            padding: 8px 15px;
+            border-radius: 25px;
+            margin: 0 20px;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 100%;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            background: #2A363B;
+            border-radius: 20px;
+            transition: background-color 0.3s ease-in-out;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            background: #E84A5F;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px;
+            gap: 10px;
+            background-color: #1f0707;
+        }
+
+        .category {
+            background: #2A363B;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 14px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .category:hover, .category.active {
+            background: #E84A5F;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .video-item {
+            background-color: #111;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .video-item:hover {
+            transform: scale(1.03);
+        }
+
+        .video-item video {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 10px;
+        }
+
+        .video-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .video-info p {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        .no-videos {
+            text-align: center;
+            padding: 50px;
+            color: #aaa;
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .search-bar {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">Learning Mode</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search videos..." id="searchInput" onkeyup="searchVideos()">
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            {% if session.get("username") %}
+                <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories">
+        <div class="category active" onclick="filterCategory('All')">All</div>
+        <div class="category" onclick="filterCategory('Basics')">Basics</div>
+        <div class="category" onclick="filterCategory('Numbers')">Numbers</div>
+        <div class="category" onclick="filterCategory('Phrases')">Phrases</div>
+        <div class="category" onclick="filterCategory('Gestures')">Gestures</div>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="video-grid" id="videoGrid">
+        {% if videos %}
+            {% for video in videos %}
+            <div class="video-item" onclick="window.location.href='/watch/{{ video.id or video[0] }}'" 
+                 data-category="{{ video.category or video[4] or 'All' }}" 
+                 data-title="{{ (video.title or video[1])|lower }}">
+                <video muted playsinline preload="metadata">
+                    <source src="{{ url_for('static', filename=video.filename or video[3]) }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-info">
+                    <h3>{{ video.title or video[1] }}</h3>
+                    <p>{{ video.description or video[2] or 'No description' }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-videos">
+                <p>No videos available yet. Upload your first video!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Filter & Search Script -->
+    <script>
+        let currentCategory = 'All';
+
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update active category button
+            const categories = document.querySelectorAll(".category");
+            categories.forEach(cat => cat.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            applyFilters();
+        }
+
+        function searchVideos() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            const videos = document.querySelectorAll(".video-item");
+            
+            videos.forEach(video => {
+                const videoCategory = video.getAttribute("data-category");
+                const videoTitle = video.getAttribute("data-title");
+                
+                const matchesCategory = currentCategory === "All" || videoCategory === currentCategory;
+                const matchesSearch = videoTitle.includes(searchTerm);
+                
+                video.style.display = (matchesCategory && matchesSearch) ? "block" : "none";
+            });
+        }
+    </script>
+
+</body>
+</html>

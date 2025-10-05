@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Profile</title>
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        form {
+            background: #2A363B;
+            padding: 20px;
+            margin: auto;
+            width: 50%;
+            border-radius: 10px;
+        }
+
+        input {
+            display: block;
+            width: 90%;
+            padding: 10px;
+            margin: 10px auto;
+            border: 1px solid #E84A5F;
+            border-radius: 5px;
+            background: #FECEAB;
+            color: black;
+        }
+
+        .btn {
+            background: #E84A5F;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #FF847C;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Admin Profile Settings</h1>
+
+    <form action="/admin_profile" method="post" onsubmit="return validateAdminProfile()">
+        <input type="email" name="email" id="email" placeholder="New Email" required>
+        <input type="password" name="password" id="password" placeholder="New Password (optional)">
+        <button type="submit" class="btn">Update Profile</button>
+    </form>
+
+    <script>
+        function validateAdminProfile() {
+            let password = document.getElementById("password").value;
+
+            if (password.length > 0 && password.length < 6) {
+                alert("Password must be at least 6 characters long.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .signup-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #35654d;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .login-link {
+            display: block;
+            margin-top: 10px;
+            color: #044f67;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .login-link:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="signup-container">
+    <h2>Sign Up</h2>
+    <form action="{{ url_for('signup') }}" method="POST" onsubmit="return validateSignup()">
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        <input type="text" name="username" id="username" placeholder="Username" required>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <div class="error" id="error-message"></div>
+        
+        <button type="submit">Sign Up</button>
+    </form>
+    <a href="{{ url_for('login') }}" class="login-link">Already have an account? Login</a>
+</div>
+
+<script>
+function validateSignup() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    let errorMessage = document.getElementById("error-message");
+
+    errorMessage.innerText = "";
+
+    let letterCount = (username.match(/[a-zA-Z]/g) || []).length;
+    if (username.length < 5 || letterCount < 4) {
+        errorMessage.innerText = "Username must be at least 5 characters long and contain at least 4 letters.";
+        return false;
+    }
+
+    let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordRegex.test(password)) {
+        errorMessage.innerText = "Password must include an uppercase letter, lowercase letter, number, and special character.";
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

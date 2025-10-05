@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Detection</title>      
+    
+    <style>
+        /* Import Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #000;  /* Black background */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Header */
+        header {
+            position: absolute;
+            top: 20px;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            margin-left: 20px;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            color: #E84A5F;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown .dropbtn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #333;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #E84A5F;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin: 10px 0 20px;
+            color: #ccc;  /* Light grey for readability */
+        }
+
+        .btn {
+            display: inline-block;
+            background: #E84A5F;
+            color: white;
+            padding: 12px 24px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #FF847C;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .btn {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            .dropdown-content {
+                right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Sign Detection</div>
+        <nav>
+            <a href="/about">About</a>
+            <a href="/learning">Learning Mode</a> <!-- Learning Mode Option in Navbar -->
+
+            {% if session.get("username") %}
+                <!-- Show Dropdown if Logged In -->
+                <div class="dropdown">
+                    <button class="dropbtn">Welcome, {{ session["username"] }} ▼</button>
+                    <div class="dropdown-content">
+                        <a href="/user_dashboard">User Dashboard</a>
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <!-- Show Login if Not Logged In -->
+                <a href="/login">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Start Your Sign Detection</h1>
+        <p>Real-time Sign Language Detection using AI-powered technology.</p>
+        <a href="/detect" class="btn">Start Detection</a>
+    </div>
+
+</body>
+</html>

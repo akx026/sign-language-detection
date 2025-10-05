@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    :root {
+      --bg-dark: #2A363B;
+      --text-light: #ffffff;
+      --accent: #E84A5F;
+      --accent-light: #FF847C;
+      --highlight: #FECEAB;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
+      color: var(--text-light);
+    }
+
+    /* Header Section */
+    .header {
+      background: linear-gradient(135deg, var(--accent), var(--bg-dark));
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: var(--highlight);
+    }
+
+    nav {
+      text-align: center;
+      padding: 10px 0;
+      background-color: var(--bg-dark);
+    }
+
+    nav a {
+      margin: 0 20px;
+      text-decoration: none;
+      color: var(--accent-light);
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: var(--highlight);
+    }
+
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 30px auto;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: var(--bg-dark);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px;
+      flex: 1 1 45%;
+      min-width: 300px;
+      box-shadow: 0 0 10px #000;
+    }
+
+    .card h2 {
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .user-table th, .user-table td {
+      padding: 10px;
+      border-bottom: 1px solid #444;
+    }
+
+    .user-table th {
+      background: var(--accent);
+      color: white;
+    }
+
+    .actions a {
+      color: var(--highlight);
+      margin: 0 5px;
+      text-decoration: none;
+    }
+
+    .actions a:hover {
+      color: var(--accent-light);
+    }
+
+    .btn {
+      background: var(--accent);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: var(--accent-light);
+    }
+
+    ul {
+      text-align: left;
+      padding-left: 20px;
+    }
+
+    .footer-btns {
+      text-align: center;
+      margin: 30px;
+    }
+
+    /* Overlay and Upload */
+    .overlay, .upload-container {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1000;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .upload-container {
+      display: none;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: black;
+      padding: 20px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      text-align: center;
+      z-index: 1001;
+    }
+
+    .upload-container input,
+    .upload-container textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background: #111;
+      color: white;
+    }
+
+    .upload-btn, .cancel-btn {
+      width: 48%;
+      padding: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      border-radius: 6px;
+      border: none;
+    }
+
+    .upload-btn {
+      background: #1dbf73;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: var(--accent);
+      color: white;
+    }
+
+    .progress-bar {
+      height: 5px;
+      background: #444;
+      width: 90%;
+      margin: 10px auto;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      background: #1dbf73;
+      width: 0%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Welcome Admin!</h1>
+    <p>Sign Language Detection Admin Dashboard</p>
+  </div>
+
+  <nav>
+    <a href="/admin">Dashboard</a>
+    <a href="/analytics">User Analytics</a>
+    <a href="/admin_profile">Profile</a>
+    <a href="/logout">Logout</a>
+  </nav>
+
+  <div class="dashboard">
+    <!-- User Table -->
+    <div class="card">
+      <h2>All Users</h2>
+      <table class="user-table">
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td class="actions">
+            <a href="/edit_user/{{ user.id }}">Edit</a> |
+            <a href="/delete_user/{{ user.id }}" onclick="return confirm('Are you sure?')">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- Analytics -->
+    <div class="card">
+      <h2>User Analytics</h2>
+      <p><strong>Total Users:</strong> {{ total_users }}</p>
+      <h3>Recent Signups</h3>
+      <ul>
+        {% for user in recent_signups %}
+        <li>{{ user.username }} ({{ user.email }})</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-btns">
+    <button class="btn" onclick="openUpload()">Upload Video</button>
+    <a href="/admin" class="btn">Back to Home</a>
+  </div>
+
+  <!-- Upload Form Overlay -->
+  <!-- Upload Form Overlay -->
+<div class="overlay" id="overlay" onclick="closeUpload()"></div>
+<div class="upload-container" id="uploadForm">
+  <h2>Upload a Video</h2>
+  <form id="videoUploadForm" method="POST" action="/upload_video" enctype="multipart/form-data">
+    <input type="text" name="title" id="title" placeholder="Enter video title (required)" required>
+    <textarea name="description" id="description" placeholder="Tell viewers about your video"></textarea>
+    
+    <select name="category" required style="width: 90%; padding: 10px; margin: 10px 0; border-radius: 6px; border: 1px solid #555; background: #111; color: white;">
+      <option value="">-- Select Category --</option>
+      <option value="All">All</option>
+      <option value="Basics">Basics</option>
+      <option value="Numbers">Numbers</option>
+      <option value="Phrases">Phrases</option>
+      <option value="Gestures">Gestures</option>
+    </select>
+    
+    <input type="file" name="video" id="videoUpload" accept="video/*" required>
+    <div class="progress-bar">
+      <div class="progress" id="progressBar"></div>
+    </div>
+    <button type="submit" class="upload-btn">Upload</button>
+    <button type="button" class="cancel-btn" onclick="closeUpload()">Cancel</button>
+  </form>
+</div>
+
+<script>
+  function openUpload() {
+    document.getElementById("uploadForm").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  }
+
+  function closeUpload() {
+    document.getElementById("uploadForm").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
